@@ -1,9 +1,9 @@
 <template>
 	<div class="field" :class="classes">
 		<span :class="classes" class="field__show" v-if="!changing">{{ label}}</span>
-		<base-input :data="data" v-if="changing" v-model="value"></base-input>
+		<base-input :data="inputInfo" v-if="changing" v-model="value"></base-input>
 		<button class="field__btn" @click="onChange" v-if="!changing">Изменить</button>
-		<button class="field__btn" @click="onSave(data.type)" v-else>Сохранить</button>
+		<button class="field__btn" @click="onSave()" v-else>Сохранить</button>
 	</div>
 </template>
 
@@ -18,19 +18,19 @@
 		},
 		data() {
 			return {
-				error: false,
 				value: '',
 				changing: false,
 				label: this.data.placeholder,
 				saved: false,
 				edit: false,
+				inputInfo: this.data
 			}
 		},
 		methods: {
 			onSave() {
-				if(!BaseInput.data().error && this.value.length) {
+				if(this.value.length) {
 
-					if(this.data.type === 'password') {
+					if(this.inputInfo.type === 'password') {
 						let count = '';
 						for( let i = 0; i < this.value.length; i++ ) {
 							count = count + '*';
@@ -38,6 +38,7 @@
 						this.label = `Пароль[${count}]`;
 					} else {
 						this.label = this.value;
+						this.inputInfo.placeholde = this.value;
 					}
 
 					this.changing = !this.changing;

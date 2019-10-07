@@ -5,7 +5,6 @@
 		   :placeholder="data.placeholder"
 		   :type="data.type"
 		   :name="data.name"
-
 		   v-mask="data.mask"
 		   @input="isValidate"
 		   v-model.trim="msg">
@@ -21,26 +20,20 @@
 				msg: ''
 			}
 		},
-		mounted() {
-			this.isValidate()
-		},
+
 		computed: {
 			isError() {
-				return {'error': this.error}
+				return {'error' : this.error}
 			}
 		},
 		methods: {
 			isValidate() {
 				let validate = false;
 
-				console.log(this.msg);
-
 				if(!this.msg.length) {
 					this.error = true;
 					return false;
 				}
-
-				console.log(this.error);
 
 				if(this.msg.length && this.data.pattern != null && !this.data.pattern.test(this.msg)) {
 					this.error = true;
@@ -52,10 +45,10 @@
 			}
 		},
 		watch: {
-			value () {
+			value() {
 				this.msg = this.value
 			},
-			msg () {
+			msg() {
 				this.$emit('input', this.msg)
 			}
 		}
