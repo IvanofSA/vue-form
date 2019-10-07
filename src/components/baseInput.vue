@@ -21,6 +21,9 @@
 				msg: ''
 			}
 		},
+		mounted() {
+			this.isValidate()
+		},
 		computed: {
 			isError() {
 				return {'error': this.error}
@@ -30,10 +33,15 @@
 			isValidate() {
 				let validate = false;
 
+				console.log(this.msg);
+
 				if(!this.msg.length) {
 					this.error = true;
 					return false;
 				}
+
+				console.log(this.error);
+
 				if(this.msg.length && this.data.pattern != null && !this.data.pattern.test(this.msg)) {
 					this.error = true;
 					validate = false;

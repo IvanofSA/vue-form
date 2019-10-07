@@ -28,7 +28,8 @@
 		},
 		methods: {
 			onSave() {
-				if(!BaseInput.data().error) {
+				if(!BaseInput.data().error && this.value.length) {
+
 					if(this.data.type === 'password') {
 						let count = '';
 						for( let i = 0; i < this.value.length; i++ ) {
