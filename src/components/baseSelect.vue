@@ -1,6 +1,6 @@
 <template>
 	<select class="select" @change="change">
-		<option value="">Страна</option>
+		<option value="">{{defultOpt}}</option>
 		<option v-for="(option, index) in options"
 				:key="index" :value="option.code"
 				:selected="selectedOption(option)">
@@ -11,7 +11,7 @@
 
 <script>
 	export default {
-		props: ['options', 'value'],
+		props: ['options', 'value', 'defultOpt'],
 		data() {
 			return {
 				selected: null
@@ -45,5 +45,9 @@
 		padding: 0 10px;
 		border: 1px solid $gray;
 		background: $white;
+
+		&.error {
+			border: 1px solid $hover-red;
+		}
 	}
 </style>

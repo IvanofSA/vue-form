@@ -16,92 +16,89 @@
 			</div>
 			<div class="settings__block block">
 				<span class="block__title">Адресная книга</span>
-				<div class="block__list">
-					<span class="block__title block__title_sup">Текущий адрес доставки</span>
-					<Label v-for="(item, i) in addressList" :key="i" :data="item"></Label>
+				<div class="block__list block__list_address" :class="showAdd">
 
-					<div class="block__btn">Добавить еще один адрес</div>
-					<block-add  @add="onAddAdress(index, $event)" ></block-add>
+					<div class="block__field">
+						<span class="block__title block__title_sup">Текущий адрес доставки</span>
+						<button class="field__btn" @click="showbtn = !showbtn">Изменить</button>
+					</div>
+					<div class="block__wrap">
+						<Label v-for="(item, i) in addressList" :key="i" :data="item" :showbtn="showbtn" :index="i"
+							   @removeAddress="onRemoveAddress"></Label>
+					</div>
+
+					<div class="block__btn" @click="show = !show" v-if="!show">Добавить еще один адрес</div>
+					<add @address="onAddAdress($event)" v-if="show" class="block__add"></add>
+				</div>
+			</div>
+
+
+			<div class="settings__block block">
+				<span class="block__title">Подписки и уведомления</span>
+				<div class="block__field">
+					<base-label :data="'Оповещеать меня о текущих акциях по e-mail'" :type="'checkbox'"></base-label>
+				</div>
+				<div class="block__field">
+					<base-label :data="'Оповещеать меня о текущих акциях по Sms'" :type="'checkbox'"></base-label>
+
 				</div>
 			</div>
 		</section>
-		<aside class="share"></aside>
+		<share></share>
 	</div>
 
 </template>
 
 <script>
-	import Field from './field'
-	import Label from './label'
-	import blockAdd from './add'
+	import Field from './inputField'
+	import Label from './labelField'
+	import baseLabel from './baseLabel'
+	import Add from './blockAdd'
+	import Share from './blockShare'
 
 	export default {
 		name: 'Index',
 		components: {
 			Field,
 			Label,
-			blockAdd
+			Add,
+			baseLabel,
+			Share
 		},
 		data() {
 			return {
+				show: false,
 				county: null,
 				city: null,
+				showbtn: false,
 				addressList: [],
-				optionsCity: [
-					{
-						name: "Spb",
-						code: "Spb",
-					},
-					{
-						name: "Moscow",
-						code: "Moscow"
-					}
-				],
-				optionsCountry: [
-					{
-						name: "Argentina",
-						code: "AR",
-					},
-					{
-						name: "United States of America",
-						code: "US"
-					},
-					{
-						name: "Germany",
-						code: "DE"
-					},
-					{
-						name: "China",
-						code: "CN"
-					}
-				],
 				personal: [
 					{
 						placeholder: 'Имя',
 						name: 'name',
 						type: 'text',
-						validate: 'text',
-						mask: ''
+						pattern: /^[А-Яа-я0-9\-_./\s]*$/,
+						mask: null
 					},
 					{
 						placeholder: 'Фамилия',
 						name: 'surname',
 						type: 'text',
-						validate: 'text',
-						mask: ''
+						pattern: /^[А-Яа-я0-9\-_./\s]*$/,
+						mask: null
 					},
 					{
 						placeholder: 'Отчество',
 						name: 'patronymic',
 						type: 'text',
-						validate: 'text',
-						mask: ''
+						pattern: /^[А-Яа-я0-9\-_./\s]*$/,
+						mask: null
 					},
 					{
 						placeholder: 'Дата рождения',
 						name: 'age',
 						type: 'text',
-						validate: 'date',
+						pattern: /(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).((19|20)\d\d)/,
 						mask: '99.99.9999'
 					}
 				],
@@ -110,29 +107,40 @@
 						placeholder: '+7 (___) -__ - __',
 						name: 'phone',
 						type: 'text',
-						validate: 'phone',
+						pattern: /\+7\(\d{3}\)\d{3}-\d{2}-\d{2}/,
 						mask: '+7(999)999-99-99'
 					},
 					{
 						placeholder: 'Email',
 						name: 'email',
 						type: 'email',
-						validate: 'email',
-						mask: ''
+						pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
+						mask: null
 					},
 					{
 						placeholder: 'Пароль [********]',
 						name: 'password',
 						type: 'password',
-						validate: 'password',
-						mask: ''
+						pattern: null,
+						mask: null
 					},
 				]
 			}
 		},
+		computed: {
+			showAdd() {
+				return {
+					'active': this.show
+				}
+			}
+		},
 		methods: {
-			onAddAdress() {
-
+			onRemoveAddress(e) {
+				this.addressList.splice(e.index, 1)
+			},
+			onAddAdress(e) {
+				this.addressList.push(e.address);
+				this.show = !this.show;
 			}
 		}
 	}
@@ -144,7 +152,9 @@
 	.container {
 		display: flex;
 		flex-flow: row wrap;
-		padding: 33px 29px;
+		align-items: flex-start;
+		justify-content: space-between;
+		padding: 33px 17px;
 		max-width: 970px;
 		margin: 0 auto;
 		width: 100%;
@@ -155,16 +165,16 @@
 		width: 100%;
 
 		&__title {
-			margin-bottom: 37px;
+			margin-bottom: 30px;
+			text-transform: uppercase;
 			font-size: 24px;
 			font-family: 'Open Sans', sans-serif;
 			font-weight: 700;
 		}
 
 		&__block {
-			margin-bottom: 50px;
+			margin-bottom: 45px;
 		}
-
 	}
 
 	.block {
@@ -175,8 +185,24 @@
 
 			&_sup {
 				font-size: 14px;
-				padding: 20px 18px 0;
+				/*padding: 20px 18px 0;*/
+				padding-top: 20px;
 			}
+		}
+
+		&__field {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 20px;
+
+			@media (min-width: 500px) {
+				margin-bottom: 10px;
+
+			}
+		}
+		&__wrap {
+			margin-bottom: 31px;
 		}
 
 		&__list {
@@ -184,6 +210,19 @@
 			width: 100%;
 			flex-flow: column wrap;
 			border: 1px solid $gray;
+
+			&.active {
+				background: $gray-light;
+
+				& .block__add {
+					padding-top: 20px;
+					border-top: 1px solid $gray;
+				}
+			}
+
+			&_address {
+				padding: 0 18px;
+			}
 		}
 
 		&__item {
@@ -192,8 +231,7 @@
 			flex-flow: row wrap;
 			align-items: center;
 			justify-content: space-between;
-			min-height: 50px;
-			padding: 0 18px;
+			min-height: 49px;
 			border-bottom: 1px solid $gray;
 
 			&:last-child {
@@ -213,9 +251,9 @@
 			align-items: center;
 			width: 200px;
 			height: 30px;
-			margin-bottom: 29px;
-			padding: 0 19px;
-			background: $gray;
+			font-size: 12px;
+			margin: 0 0 29px;
+			background: #cdc9c7;
 			color: $white;
 			box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
 			transition: all 0.15s linear;
@@ -226,5 +264,39 @@
 		}
 	}
 
+	.check {
+		display: flex;
+		align-items: center;
+		position: relative;
+		padding-left: 25px;
+		height: 17px;
+		cursor: pointer;
+		font-size: 14px;
+		user-select: none;
+	}
 
+	.check__input {
+		position: absolute;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	.check__box {
+		position: absolute;
+		left: 0;
+		width: 18px;
+		height: 18px;
+		overflow: hidden;
+		background-color: white;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		background-image: url('../assets/image/check.svg');
+		border: 1px solid $gray;
+	}
+
+	.check__input:checked + .check__box {
+		/*background-color: #4A90E2;*/
+		background-image: url('../assets/image/check.svg');
+	}
 </style>

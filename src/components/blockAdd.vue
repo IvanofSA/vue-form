@@ -3,21 +3,25 @@
 		<div class="add__wrap">
 			<span class="add__title">Добавить адресс</span>
 			<div class="add__row">
-				<div class="add__wrap">
-					<input type="text" :class="classes" class="add__input" name="zip" v-model="zip"
-						   placeholder="Индекс">
-					<div class="add__msg">{{errorMsg}}</div>
+				<div class="add__field">
+					<base-input :class="{'error': zipError}" :data="zipInput" v-model.trim="zip"
+								class="add__input"></base-input>
 				</div>
-				<custom-select v-model="county" :options="optionsCountry"></custom-select>
-				<custom-select v-model="city" :options="optionsCity"></custom-select>
-			</div>
-			<div class="add__row">
-				<div class="add__wrap">
-					<input type="text" :class="classes" class="add__input add__input_full" name="address"
-						   v-model="address" placeholder="Адрес">
-					<div class="add__msg">{{errorMsg}}</div>
+				<div class="add__field">
+					<custom-select :class="{'error': countyError}" v-model="county" :defultOpt="'Страна'"
+								   :options="optionsCountry"></custom-select>
+				</div>
+				<div class="add__field">
+					<custom-select :class="{'error': cityError}" v-model="city" :defultOpt="'Город'"
+								   :options="optionsCity"></custom-select>
+				</div>
+
+				<div class="add__field add__field_full">
+					<base-input :class="{'error': addressError}" :data="addressInput" v-model.trim="address"
+								class="add__input add__input_full"></base-input>
 				</div>
 			</div>
+
 		</div>
 
 		<div class="add__btn" @click="add">Добавить адрес</div>
@@ -25,12 +29,14 @@
 </template>
 
 <script>
-	import CustomSelect from './select'
+	import CustomSelect from './baseSelect'
+	import BaseInput from './baseInput'
 
 	export default {
 		name: "add",
 		components: {
-			CustomSelect
+			CustomSelect,
+			BaseInput
 		},
 		data() {
 			return {
@@ -38,6 +44,10 @@
 				city: null,
 				zip: null,
 				address: null,
+				countyError: false,
+				cityError: false,
+				zipError: false,
+				addressError: false,
 				optionsCity: [
 					{
 						name: "Spb",
@@ -66,27 +76,45 @@
 						code: "CN"
 					}
 				],
-				addressInfo: {
-					placeholder: 'Адрес',
-					name: 'address',
-					type: 'text',
-					validate: 'text',
-					mask: ''
-				},
-				zipInfo: {
+				zipInput: {
 					placeholder: 'Индекс',
 					name: 'zip',
 					type: 'text',
-					validate: 'text',
-					mask: ''
-				}
+					pattern: /^\d+$/,
+					mask: null
+				},
+				addressInput: {
+					placeholder: 'Адрес',
+					name: 'address',
+					type: 'text',
+					pattern: null,
+					mask: null
+				},
 			}
 		},
+
 		methods: {
 			add() {
-				// this.$emit('valid', {
-				// 	status: this.valid
-				// });
+				let valid = false;
+				if(this.zip === null) {
+					this.zipError = true;
+				}
+				if(this.address === null) {
+					this.addressError = true;
+				}
+				if(this.city === null) {
+					this.cityError = true;
+				}
+				if(this.county === null) {
+					this.countyError = true;
+				}
+				if(this.zip && this.address && this.city.name && this.county.name) {
+					valid = true;
+				}
+
+				if(valid) {
+					this.$emit('address', {address: `${this.zip} ${this.county.name}, ${this.city.name}, ${this.address}`});
+				}
 			}
 		}
 	}
@@ -96,7 +124,6 @@
 	@import './../assets/css/_variebles.scss';
 
 	.add {
-		padding: 0 18px;
 
 		&__title {
 			display: block;
@@ -111,6 +138,21 @@
 			margin-bottom: 20px;
 		}
 
+		&__field {
+			position: relative;
+			margin-bottom: 10px;
+			&_full {
+				width: 100%;
+			}
+		}
+
+		&__msg {
+			position: absolute;
+			bottom: 0;
+			font-size: 8px;
+			color: red;
+		}
+
 		&__row {
 			display: flex;
 			flex-flow: row wrap;
@@ -120,7 +162,6 @@
 
 		}
 
-
 		&__input {
 			width: 175px;
 			height: 30px;
@@ -128,6 +169,10 @@
 			padding: 0 10px;
 			border: 1px solid $gray;
 			background: $white;
+
+			&.error {
+				border: 1px solid $hover-red;
+			}
 
 			&_full {
 				width: 100%;
