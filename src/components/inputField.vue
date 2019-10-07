@@ -38,7 +38,7 @@
 						this.label = `Пароль[${count}]`;
 					} else {
 						this.label = this.value;
-						this.inputInfo.placeholde = this.value;
+						this.inputInfo.placeholder = this.value;
 					}
 
 					this.changing = !this.changing;
