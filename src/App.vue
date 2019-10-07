@@ -43,4 +43,24 @@
 		height: 100% !important;
 	}
 
+	.btn {
+		display: flex;
+		position: relative;
+		justify-content: center;
+		cursor: pointer;
+		align-items: center;
+		width: 200px;
+		height: 30px;
+		font-size: 12px;
+		margin: 0 0 29px;
+		background: #cdc9c7;
+		color: $white;
+		box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
+		transition: all 0.15s linear;
+
+		&:active {
+			box-shadow: inset 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+		}
+	}
+
 </style>

@@ -19,16 +19,21 @@
 		},
 		methods: {
 			selectedOption(option) {
-				if (this.value) {
+				if(this.value) {
 					return option.code === this.value.code;
 				}
 				return false;
 			},
 			change(e) {
-				const selectedCode = e.target.value;
-				const option = this.options.find((option) => {
-					return selectedCode === option.code;
-				});
+				let selectedCode = e.target.value,
+					option = null;
+
+				for( let i = 0; i < this.options.length; i++ ) {
+					if(this.options[i].code === selectedCode) {
+						option = this.options[i]
+					}
+				}
+
 				this.$emit("input", option);
 			}
 		}

@@ -5,7 +5,7 @@
 		   :placeholder="data.placeholder"
 		   :type="data.type"
 		   :name="data.name"
-		   :value="msg"
+
 		   v-mask="data.mask"
 		   @input="isValidate"
 		   v-model.trim="msg">
@@ -14,12 +14,11 @@
 <script>
 	export default {
 		name: "baseInput",
-		props: ['data', 'value'],
+		props: ['data'],
 		data() {
 			return {
 				error: false,
-
-				msg: this.value
+				msg: ''
 			}
 		},
 		computed: {

@@ -24,7 +24,7 @@
 
 		</div>
 
-		<div class="add__btn" @click="add">Добавить адрес</div>
+		<div class="add__btn btn" @click="add">Добавить адрес</div>
 	</div>
 </template>
 
@@ -111,7 +111,6 @@
 				if(this.zip && this.address && this.city.name && this.county.name) {
 					valid = true;
 				}
-
 				if(valid) {
 					this.$emit('address', {address: `${this.zip} ${this.county.name}, ${this.city.name}, ${this.address}`});
 				}
@@ -124,7 +123,6 @@
 	@import './../assets/css/_variebles.scss';
 
 	.add {
-
 		&__title {
 			display: block;
 			margin-bottom: 17px;
@@ -180,25 +178,9 @@
 		}
 
 		&__btn {
-			display: flex;
-			position: relative;
-			justify-content: center;
-			cursor: pointer;
-			align-items: center;
+			background: $hover-red;
 			margin-left: auto;
 			margin-right: 0;
-			width: 200px;
-			height: 30px;
-			margin-bottom: 29px;
-			padding: 0 19px;
-			background: $hover-red;
-			color: $white;
-			box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
-			transition: all 0.15s linear;
-
-			&:active {
-				box-shadow: inset 0 2px 3px 0 rgba(0, 0, 0, 0.2);
-			}
 		}
 	}
 </style>

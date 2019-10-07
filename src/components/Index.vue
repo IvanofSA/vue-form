@@ -27,7 +27,7 @@
 							   @removeAddress="onRemoveAddress"></Label>
 					</div>
 
-					<div class="block__btn" @click="show = !show" v-if="!show">Добавить еще один адрес</div>
+					<div class="block__btn btn" @click="show = !show" v-if="!show">Добавить еще один адрес</div>
 					<add @address="onAddAdress($event)" v-if="show" class="block__add"></add>
 				</div>
 			</div>
@@ -244,23 +244,7 @@
 		}
 
 		&__btn {
-			display: flex;
-			position: relative;
-			justify-content: center;
-			cursor: pointer;
-			align-items: center;
-			width: 200px;
-			height: 30px;
-			font-size: 12px;
-			margin: 0 0 29px;
 			background: #cdc9c7;
-			color: $white;
-			box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
-			transition: all 0.15s linear;
-
-			&:active {
-				box-shadow: inset 0 2px 3px 0 rgba(0, 0, 0, 0.2);
-			}
 		}
 	}
 
