@@ -44,7 +44,7 @@
 				</div>
 			</div>
 		</section>
-		<share></share>
+		<share :list="shareList"></share>
 	</div>
 
 </template>
@@ -72,6 +72,36 @@
 				city: null,
 				showbtn: false,
 				addressList: [],
+				shareList: [
+					{
+						name: 'Facebook',
+						tag: 'fb',
+						icon: 'image/fb.png',
+						color: '#1d59a3',
+						link: '#',
+					},
+					{
+						name: 'Вконтакте',
+						tag: 'vk',
+						icon: 'image/vk.png',
+						color: '#1c608d',
+						link: '#',
+					},
+					{
+						name: 'Twitter',
+						tag: 'tw',
+						icon: 'image/tw.png',
+						color: '#00b2e6',
+						link: '#',
+					},
+					{
+						name: 'Одноклассники',
+						tag: 'ok',
+						icon: 'image/ok.png',
+						color: '#ef7800',
+						link: '#',
+					}
+				],
 				personal: [
 					{
 						placeholder: 'Имя',

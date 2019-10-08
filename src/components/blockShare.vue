@@ -2,28 +2,12 @@
 	<aside class="share">
 		<span class="share__title">Социальные сети</span>
 		<p class="share__desc">Привяжите учетную запись социальной сети и используйте ee для входа</p>
-		<div class="share__list">
-			<a class="share__item share__item_fb" href="">
-				<i class="share__icon"></i>
-				<span class="share__text">Facebook</span>
-			</a>
-		</div>
-		<div class="share__list">
-			<a class="share__item share__item_vk" href="">
-				<i class="share__icon"></i>
-				<span class="share__text">Вконтакте</span>
-			</a>
-		</div>
-		<div class="share__list">
-			<a class="share__item share__item_tw" href="">
-				<i class="share__icon"></i>
-				<span class="share__text">Twitter</span>
-			</a>
-		</div>
-		<div class="share__list">
-			<a class="share__item share__item_ok" href="">
-				<i class="share__icon"></i>
-				<span class="share__text">Одноклассники</span>
+		<div class="share__list"
+			 v-for="(item, i) in list"
+			 :key="i" >
+			<a :class="`share__item share__item_${item.tag}`" :href="item.link" :style="{ backgroundColor: `${item.color}` }">
+				<i class="share__icon" :style="{ backgroundImage: `url('${getImgUrl(item.icon)}')` }"></i>
+				<span class="share__text">{{item.name}}</span>
 			</a>
 		</div>
 	</aside>
@@ -31,7 +15,13 @@
 
 <script>
 	export default {
-		name: "blockShare"
+		name: "blockShare",
+		props: ['list'],
+		methods: {
+			getImgUrl(pic) {
+				return require('../assets/'+pic)
+			}
+		}
 	}
 </script>
 
@@ -67,9 +57,14 @@
 			align-items: center;
 		}
 
+
 		&__icon {
 			width: 24px;
 			height: 19px;
+			background-position: center;
+			background-repeat: no-repeat;
+			/*background-size: contain;*/
+
 		}
 		&__item {
 			display: flex;
@@ -80,39 +75,6 @@
 			height: 40px;
 			margin-bottom: 15px;
 			padding: 0 21px;
-
-			&_fb {
-				background: #1d59a3;
-
-				& .share__icon {
-					background: url('../assets/image/fb.png') no-repeat center;
-					background-size: contain;
-				}
-			}
-			&_vk {
-				background: #1c608d;
-
-				& .share__icon {
-					background: url('../assets/image/vk.png') no-repeat center;
-					background-size: contain;
-				}
-			}
-			&_tw {
-				background: #00b2e6;
-
-				& .share__icon {
-					background: url('../assets/image/tw.png') no-repeat center;
-					background-size: contain;
-				}
-			}
-			&_ok {
-				background: #ef7800;
-
-				& .share__icon {
-					background: url('../assets/image/ok.png') no-repeat center;
-					background-size: contain;
-				}
-			}
 		}
 
 		&__text {
